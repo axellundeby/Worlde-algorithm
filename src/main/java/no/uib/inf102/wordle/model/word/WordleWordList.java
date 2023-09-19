@@ -89,9 +89,13 @@ public class WordleWordList {
 	 * @param feedback
 	 */
 	public void eliminateWords(WordleWord feedback) {
-		// TODO implement this
-		// tar bort alle ord som ikke passer med feedbacken, random ord av de som mulig
-
+		List<String> posslist = new ArrayList<>();
+		for (String possWord : possibleAnswers) {
+			if (WordleWord.isPossibleWord(possWord, feedback)) {
+				posslist.add(possWord);
+			}
+		}
+		possibleAnswers = posslist;
 	}
 
 	/**

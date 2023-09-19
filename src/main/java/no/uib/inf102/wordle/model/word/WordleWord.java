@@ -17,19 +17,21 @@ public class WordleWord implements Iterable<WordleCharacter> {
     private List<WordleCharacter> word;
 
     /**
-     * Creates a WordleWord by matching the characters in the given string to the given AnswerType array.
+     * Creates a WordleWord by matching the characters in the given string to the
+     * given AnswerType array.
+     * 
      * @param word
      * @param feedback
      */
     public WordleWord(String word, AnswerType[] feedback) {
-    	if(word.length()!=feedback.length)
-    		throw new IllegalArgumentException("word and feedback must have same length");
-    	for(AnswerType type : feedback) {
-    		if(type==AnswerType.BLANK) {
-    			throw new IllegalArgumentException("Feedback can not contain BLANK");
-    		}
-    	}
-    		
+        if (word.length() != feedback.length)
+            throw new IllegalArgumentException("word and feedback must have same length");
+        for (AnswerType type : feedback) {
+            if (type == AnswerType.BLANK) {
+                throw new IllegalArgumentException("Feedback can not contain BLANK");
+            }
+        }
+
         this.word = new ArrayList<>();
         for (int i = 0; i < word.length(); i++) {
             char c = word.charAt(i);
@@ -74,9 +76,12 @@ public class WordleWord implements Iterable<WordleCharacter> {
         }
         return false;
     }
+    // stars
+    // hosre
 
     /**
      * Returns the WordleWord as a String without AnswerType.
+     * 
      * @return
      */
     public String getWordString() {

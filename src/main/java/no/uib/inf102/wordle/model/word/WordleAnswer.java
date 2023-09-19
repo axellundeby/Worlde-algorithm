@@ -125,3 +125,20 @@ public class WordleAnswer {
         return new WordleWord(guess, feedback);
     }
 }
+
+// AnswerType[] feedback = new AnswerType[5];
+// for (int i = 0; i < wordLength; i++) {
+// Character gessedChar = guess.charAt(i);
+// Character answerChar = answer.charAt(i);
+// if (answerChar == gessedChar) {
+// answerMap.put(gessedChar, answerMap.get(gessedChar) - 1);
+// feedback[i] = AnswerType.CORRECT;
+// else if(answerChar != gessedChar && answerMap.getOrDefault(gessedChar, 0) >
+// 0){
+// answerMap.put(gessedChar, answerMap.get(gessedChar) - 1);
+// feedback[i] = AnswerType.WRONG_POSITION;
+// }
+// } else {
+// feedback[i] = AnswerType.WRONG;
+// }
+// }
