@@ -7,9 +7,9 @@ import java.util.Map;
 import no.uib.inf102.wordle.model.word.WordleWord;
 import no.uib.inf102.wordle.model.word.WordleWordList;
 
-
 /**
- * This strategy finds the word within the possible words which has the highest expected
+ * This strategy finds the word within the possible words which has the highest
+ * expected
  * number of green matches.
  */
 public class FrequencyStrategy implements IStrategy {
@@ -22,7 +22,9 @@ public class FrequencyStrategy implements IStrategy {
 
     @Override
     public String makeGuess(WordleWord feedback) {
-        //TODO implement this
+        // TODO implement this
+        // står litt i oppgave teskt, plukk litt fra eliminate, men forbedre den, noen
+        // bokstaver er vanligere enn andre. Bruk disse
         return "";
     }
 

@@ -11,7 +11,8 @@ import no.uib.inf102.wordle.resources.GetWords;
 
 /**
  * This class describes a structure of two lists for a game of Wordle: The list
- * of words that can be used as guesses and the list of words that can be possible answers.
+ * of words that can be used as guesses and the list of words that can be
+ * possible answers.
  */
 public class WordleWordList {
 
@@ -88,7 +89,9 @@ public class WordleWordList {
 	 * @param feedback
 	 */
 	public void eliminateWords(WordleWord feedback) {
-		//TODO implement this
+		// TODO implement this
+		// tar bort alle ord som ikke passer med feedbacken, random ord av de som mulig
+
 	}
 
 	/**
@@ -112,6 +115,7 @@ public class WordleWordList {
 
 	/**
 	 * Returns the word length in the list of valid guesses.
+	 * 
 	 * @return
 	 */
 	public int wordLength() {

@@ -1,5 +1,6 @@
 package no.uib.inf102.wordle.model.word;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import no.uib.inf102.wordle.resources.GetWords;
@@ -17,6 +18,7 @@ public class WordleAnswer {
 
     /**
      * Creates a WordleAnswer object with a given word.
+     * 
      * @param answer
      */
     public WordleAnswer(String answer) {
@@ -37,7 +39,7 @@ public class WordleAnswer {
      */
     public WordleAnswer(Random random) {
         this(getRandomWordleAnswer(random));
-	}
+    }
 
     /**
      * Gets a random wordle answer
@@ -77,19 +79,49 @@ public class WordleAnswer {
      * @param answer
      * @return
      */
-    public static WordleWord matchWord(String guess, String answer) {
+    public static WordleWord matchWord(String guess, String answer) {// O(n)
         int wordLength = answer.length();
         if (guess.length() != wordLength)
             throw new IllegalArgumentException("Guess and answer must have same number of letters but guess = " + guess
                     + " and answer = " + answer);
 
-        //TODO: fix this method
-        
-        AnswerType[] feedback = new AnswerType[5];
-        for (int i=0; i<wordLength; i++) {
-            feedback[i] = AnswerType.WRONG;
+        HashMap<Character, Integer> answerMap = new HashMap<>();
+        for (int i = 0; i < wordLength; i++) {
+            answerMap.put(answer.charAt(i), answerMap.getOrDefault(answer.charAt(i), 0) + 1);
+            // legger til alle Chars i en hashmap, om et nytt element legges til øker valuen
+            // med 1
+
+            // stars
+
+            // s:2
+            // t:1
+            // a:1
+            // r:1
+
+            // stasr
         }
 
-        return new WordleWord(guess,feedback);
+        AnswerType[] feedback = new AnswerType[5];
+        for (int i = 0; i < wordLength; i++) {
+            Character gessedChar = guess.charAt(i);
+            Character answerChar = answer.charAt(i);
+            if (answerChar == gessedChar) {
+                answerMap.put(gessedChar, answerMap.get(gessedChar) - 1);
+                feedback[i] = AnswerType.CORRECT;
+            } else {
+                feedback[i] = AnswerType.WRONG;
+            }
+        }
+
+        for (int i = 0; i < wordLength; i++) {
+            Character gessedChar = guess.charAt(i);
+            Character answerChar = answer.charAt(i);
+            if (answerChar != gessedChar && answerMap.getOrDefault(gessedChar, 0) > 0) {
+                answerMap.put(gessedChar, answerMap.get(gessedChar) - 1);
+                feedback[i] = AnswerType.WRONG_POSITION;
+            }
+
+        }
+        return new WordleWord(guess, feedback);
     }
 }

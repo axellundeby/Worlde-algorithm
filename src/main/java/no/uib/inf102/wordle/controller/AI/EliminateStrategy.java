@@ -21,22 +21,22 @@ public class EliminateStrategy implements IStrategy {
     private WordleWordList guesses;
 
     public EliminateStrategy() {
-    	reset();
+        reset();
     }
 
     @Override
     public String makeGuess(WordleWord feedback) {
-        if (feedback != null) {
-        	guesses.eliminateWords(feedback);
+        if (feedback != null) {// ikke første runde
+            guesses.eliminateWords(feedback);// elimnierer ord d ikke kan være
         }
 
         // Choose a random word from the possible guesses after eliminating
         int randIndex = random.nextInt(guesses.size());
-        return  guesses.possibleAnswers().get(randIndex);
+        return guesses.possibleAnswers().get(randIndex);
     }
 
     @Override
     public void reset() {
-    	guesses = new WordleWordList();
+        guesses = new WordleWordList();
     }
 }
