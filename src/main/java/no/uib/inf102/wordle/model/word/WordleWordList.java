@@ -125,4 +125,66 @@ public class WordleWordList {
 	public int wordLength() {
 		return allWords.get(0).length();
 	}
+
+	private List<HashMap<Character, Integer>> countCommonLetters(List<String> poss) {
+
+		HashMap<Character, Integer> firstLetter = new HashMap<>();
+		HashMap<Character, Integer> secondLetter = new HashMap<>();
+		HashMap<Character, Integer> thirdLetter = new HashMap<>();
+		HashMap<Character, Integer> fourthLetter = new HashMap<>();
+		HashMap<Character, Integer> fifthLetter = new HashMap<>();
+
+		for (String word : poss) {
+			firstLetter.put(word.charAt(0), firstLetter.getOrDefault(word.charAt(0), 0) + 1);
+			secondLetter.put(word.charAt(1), secondLetter.getOrDefault(word.charAt(1), 0) + 1);
+			thirdLetter.put(word.charAt(2), thirdLetter.getOrDefault(word.charAt(2), 0) + 1);
+			fourthLetter.put(word.charAt(3), fourthLetter.getOrDefault(word.charAt(3), 0) + 1);
+			fifthLetter.put(word.charAt(4), fifthLetter.getOrDefault(word.charAt(4), 0) + 1);
+		}
+		List<HashMap<Character, Integer>> hashMapList = new ArrayList<>();
+
+		hashMapList.add(firstLetter);
+		hashMapList.add(secondLetter);
+		hashMapList.add(thirdLetter);
+		hashMapList.add(fourthLetter);
+		hashMapList.add(fifthLetter);
+		return hashMapList;
+	}
+
+	/**
+	 * Finds the best word from a list of possible answers based on common letter
+	 * counts.
+	 *
+	 * This method calculates a score for each word in the list of possible answers
+	 * by comparing the letters in the word to the common letter counts provided by
+	 * the
+	 * countCommonLetters method. The word with the highest score is considered the
+	 * best word.
+	 *
+	 * @return The best word among the list of possible answers.
+	 */
+	public String bestword() {
+		List<String> poss = possibleAnswers();
+		List<HashMap<Character, Integer>> hashmapList = countCommonLetters(poss);
+
+		List<String> words = getAllWords();
+		int highscore = 0;
+		String bestword = "";
+		for (String word : words) {// O(n) siden word er bare 5 bokstaver
+			int wordPoints = 0;
+			for (int i = 0; i < word.length(); i++) {
+				int charPoints = 0;
+				HashMap<Character, Integer> currentMap = hashmapList.get(i);
+				charPoints += currentMap.getOrDefault(word.charAt(i), 0);
+				wordPoints += charPoints;
+			}
+			if (wordPoints > highscore) {
+				highscore = wordPoints;
+				bestword = word;
+			}
+			wordPoints = 0;
+		}
+		return bestword;
+	}
+
 }
