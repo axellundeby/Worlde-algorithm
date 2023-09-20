@@ -93,10 +93,10 @@ public class WordleAnswer {
 
             // stars
 
-            // s:2
-            // t:1
-            // a:1
-            // r:1
+            // s:0
+            // t:0
+            // a:0
+            // r:0
 
             // stasr
         }

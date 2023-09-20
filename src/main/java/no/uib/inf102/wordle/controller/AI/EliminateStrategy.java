@@ -26,8 +26,8 @@ public class EliminateStrategy implements IStrategy {
 
     @Override
     public String makeGuess(WordleWord feedback) {
-        if (feedback != null) {// ikke første runde
-            guesses.eliminateWords(feedback);// elimnierer ord d ikke kan være
+        if (feedback != null) {
+            guesses.eliminateWords(feedback);
         }
 
         // Choose a random word from the possible guesses after eliminating
