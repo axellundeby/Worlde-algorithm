@@ -13,15 +13,18 @@ public class MyAiStrategy implements IStrategy {
         reset();
     }
 
+    //
+
     @Override
     public String makeGuess(WordleWord feedback) {
         if (feedback != null) {
             guesses.eliminateWords(feedback);
         }
-        for (WordleWord feedbackelement : feedbackList) {
-
-        }
+        guesses.bestword(true);
         return null;
+        // om en grønn
+        // gjett bare forskjellig bokstaver
+        // ikke gjett på ord med to av samme
     }
 
     @Override

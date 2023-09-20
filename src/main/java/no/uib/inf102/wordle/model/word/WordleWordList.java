@@ -163,14 +163,16 @@ public class WordleWordList {
 	 *
 	 * @return The best word among the list of possible answers.
 	 */
-	public String bestword() {
+	public String bestword(boolean diff) {
 		List<String> poss = possibleAnswers();
 		List<HashMap<Character, Integer>> hashmapList = countCommonLetters(poss);
-
 		List<String> words = getAllWords();
 		int highscore = 0;
 		String bestword = "";
 		for (String word : words) {// O(n) siden word er bare 5 bokstaver
+			if (diff && !allCharsDifferent(word)) {
+				continue;
+			}
 			int wordPoints = 0;
 			for (int i = 0; i < word.length(); i++) {
 				int charPoints = 0;
@@ -185,6 +187,22 @@ public class WordleWordList {
 			wordPoints = 0;
 		}
 		return bestword;
+	}
+
+	private boolean allCharsDifferent(String word) {
+		HashMap<Character, Integer> dupMap = new HashMap<>();
+		char[] chars = word.toCharArray();
+		for (int i = 0; i < word.length(); i++) {
+			dupMap.put(word.charAt(i), dupMap.getOrDefault(word.charAt(i), 0) + 1);
+		}
+
+		for (Character c : chars) {
+			if (dupMap.get(c) > 1) {
+				return false;
+			}
+		}
+		return true;
+
 	}
 
 }
