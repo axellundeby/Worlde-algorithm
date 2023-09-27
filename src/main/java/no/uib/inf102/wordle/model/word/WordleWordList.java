@@ -127,27 +127,17 @@ public class WordleWordList {
 	}
 
 	private List<HashMap<Character, Integer>> countCommonLetters(List<String> poss) {
-
-		HashMap<Character, Integer> firstLetter = new HashMap<>();
-		HashMap<Character, Integer> secondLetter = new HashMap<>();
-		HashMap<Character, Integer> thirdLetter = new HashMap<>();
-		HashMap<Character, Integer> fourthLetter = new HashMap<>();
-		HashMap<Character, Integer> fifthLetter = new HashMap<>();
-
-		for (String word : poss) {
-			firstLetter.put(word.charAt(0), firstLetter.getOrDefault(word.charAt(0), 0) + 1);
-			secondLetter.put(word.charAt(1), secondLetter.getOrDefault(word.charAt(1), 0) + 1);
-			thirdLetter.put(word.charAt(2), thirdLetter.getOrDefault(word.charAt(2), 0) + 1);
-			fourthLetter.put(word.charAt(3), fourthLetter.getOrDefault(word.charAt(3), 0) + 1);
-			fifthLetter.put(word.charAt(4), fifthLetter.getOrDefault(word.charAt(4), 0) + 1);
-		}
 		List<HashMap<Character, Integer>> hashMapList = new ArrayList<>();
 
-		hashMapList.add(firstLetter);
-		hashMapList.add(secondLetter);
-		hashMapList.add(thirdLetter);
-		hashMapList.add(fourthLetter);
-		hashMapList.add(fifthLetter);
+		for (int i = 0; i < 5; i++) {
+			HashMap<Character, Integer> letterCount = new HashMap<>();
+			for (String word : poss) {
+				char letter = word.charAt(i);
+				letterCount.put(letter, letterCount.getOrDefault(letter, 0) + 1);
+			}
+			hashMapList.add(letterCount);
+		}
+
 		return hashMapList;
 	}
 
@@ -163,16 +153,12 @@ public class WordleWordList {
 	 *
 	 * @return The best word among the list of possible answers.
 	 */
-	public String bestword(boolean diff) {
-		List<String> poss = possibleAnswers();
-		List<HashMap<Character, Integer>> hashmapList = countCommonLetters(poss);
-		List<String> words = getAllWords();
+	public String bestword() {
+		List<String> words = possibleAnswers();
+		List<HashMap<Character, Integer>> hashmapList = countCommonLetters(words);
 		int highscore = 0;
 		String bestword = "";
 		for (String word : words) {// O(n) siden word er bare 5 bokstaver
-			if (diff && !allCharsDifferent(word)) {
-				continue;
-			}
 			int wordPoints = 0;
 			for (int i = 0; i < word.length(); i++) {
 				int charPoints = 0;
@@ -189,20 +175,8 @@ public class WordleWordList {
 		return bestword;
 	}
 
-	private boolean allCharsDifferent(String word) {
-		HashMap<Character, Integer> dupMap = new HashMap<>();
-		char[] chars = word.toCharArray();
-		for (int i = 0; i < word.length(); i++) {
-			dupMap.put(word.charAt(i), dupMap.getOrDefault(word.charAt(i), 0) + 1);
-		}
-
-		for (Character c : chars) {
-			if (dupMap.get(c) > 1) {
-				return false;
-			}
-		}
-		return true;
-
+	public String orate() {
+		return "orate";
 	}
 
 }
