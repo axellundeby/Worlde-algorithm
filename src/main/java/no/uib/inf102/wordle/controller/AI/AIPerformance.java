@@ -16,7 +16,7 @@ import no.uib.inf102.wordle.model.word.WordleWord;
  */
 public class AIPerformance {
 
-    public static final int N_GAMES = 200;
+    public static final int N_GAMES = 2000;
     public static final int MAX_N_GUESSES = 20;
     static long seed = 14212l;
 

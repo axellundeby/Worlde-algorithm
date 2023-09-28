@@ -2,8 +2,10 @@ package no.uib.inf102.wordle.controller.AI;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import no.uib.inf102.wordle.model.word.AnswerType;
 import no.uib.inf102.wordle.model.word.WordleCharacter;
@@ -18,6 +20,7 @@ public class MyAiStrategy implements IStrategy {
 
     private HashMap<Character, Integer> confirmedGreen;
     private HashMap<Character, Integer> confirmedYellow;
+    private HashMap<Character, Integer> confirmedGray;
 
     public MyAiStrategy() {
         reset();
@@ -30,15 +33,23 @@ public class MyAiStrategy implements IStrategy {
             copyList = eliminateGreenAsGrey(copyList, feedback);
             confirmedPositions(feedback);
             removeGreenFromCopyList();
-            removeGreyFromCopyList(feedback);
-            removeWordsWithoutYellowFromCopyList();
+            removeGrayFromCopyList();
         }
 
         if (guessCount == 0) {
             guessCount++;
             return guesses.bestword();
         }
-        if (confirmedGreen.size() <= 1 && confirmedYellow.size() <= 1) {
+
+        if (guessCount >= 1) {
+            dontGuessYellowOnSameIndex();
+            removeGreenFromCopyList();
+            // eliminateWordsWithDuplicateLetters();
+            guessCount++;
+            return guesses.bestword();
+        }
+        if (guessCount >= 1 && (confirmedGreen.size() <= 1 && confirmedYellow.size() <= 1)// endre case
+                || (confirmedGray.size() <= 3) || confirmedGreen.size() <= 3) {
             if (copyList.size() != 0) {
                 guessCount++;
                 return copyList.bestword();
@@ -46,55 +57,7 @@ public class MyAiStrategy implements IStrategy {
         }
 
         guessCount++;
-        // If copyList is empty, fall back to using guesses.
         return guesses.bestword();
-    }
-
-    private void removeGreenFromCopyList() {
-        List<String> wordsToRemove = new ArrayList<>();
-
-        for (String word : copyList.possibleAnswers()) {
-            boolean containsGreen = false;
-
-            for (char c : word.toCharArray()) {
-                if (confirmedGreen.containsKey(c)) {
-                    containsGreen = true;
-                    break;
-                }
-            }
-
-            if (containsGreen) {
-                wordsToRemove.add(word);
-            }
-        }
-
-        for (String wordToRemove : wordsToRemove) {
-            copyList.remove(wordToRemove);
-        }
-    }
-
-    private void removeGreyFromCopyList(WordleWord feedback) {
-        List<String> wordsToRemove = new ArrayList<>();
-        for (String word : copyList.possibleAnswers()) {
-            if (containsGreyLetter(word, feedback)) {
-                wordsToRemove.add(word);
-            }
-        }
-        for (String wordToRemove : wordsToRemove) {
-            copyList.remove(wordToRemove);
-        }
-    }
-
-    private void removeWordsWithoutYellowFromCopyList() {
-        List<String> wordsToRemove = new ArrayList<>();
-        for (String word : copyList.possibleAnswers()) {
-            if (!containsYellowLetter(word)) {
-                wordsToRemove.add(word);
-            }
-        }
-        for (String wordToRemove : wordsToRemove) {
-            copyList.remove(wordToRemove);
-        }
     }
 
     @Override
@@ -103,6 +66,7 @@ public class MyAiStrategy implements IStrategy {
         copyList = new WordleWordList(guesses.possibleAnswers());
         confirmedGreen = new HashMap<>();
         confirmedYellow = new HashMap<>();
+        confirmedGray = new HashMap<>();
         guessCount = 0;
     }
 
@@ -115,8 +79,14 @@ public class MyAiStrategy implements IStrategy {
             if (wc.answerType == AnswerType.WRONG_POSITION) {
                 confirmedYellow.put(wc.letter, index);
             }
+            if (wc.answerType == AnswerType.WRONG) {
+                confirmedGray.put(wc.letter, index);
+            }
             index++;
         }
+        System.out.println("Green: " + confirmedGreen);
+        System.out.println("Yellow: " + confirmedYellow);
+        System.out.println("Gray: " + confirmedGray);
     }
 
     private WordleWordList eliminateGreenAsGrey(WordleWordList wordList, WordleWord feedback) {
@@ -152,21 +122,97 @@ public class MyAiStrategy implements IStrategy {
         return new WordleWordList(filteredPossibleAnswers);
     }
 
-    private boolean containsGreyLetter(String word, WordleWord feedback) {
-        for (WordleCharacter wc : feedback) {
-            if (wc.answerType == AnswerType.WRONG && word.contains(String.valueOf(wc.letter))) {
-                return true;
+    private void removeGreenFromCopyList() {
+        List<String> wordsToRemove = new ArrayList<>();
+
+        for (String word : copyList.possibleAnswers()) {
+            boolean containsGreen = false;
+
+            for (char c : word.toCharArray()) {
+                if (confirmedGreen.containsKey(c)) {
+                    containsGreen = true;
+                    break;
+                }
+            }
+
+            if (containsGreen) {
+                wordsToRemove.add(word);
             }
         }
-        return false;
+
+        for (String wordToRemove : wordsToRemove) {
+            copyList.remove(wordToRemove);
+        }
     }
 
-    private boolean containsYellowLetter(String word) {
-        for (Character c : confirmedYellow.keySet()) {
-            if (word.contains(String.valueOf(c))) {
-                return true;
+    private void removeGrayFromCopyList() {
+        List<String> wordsToRemove = new ArrayList<>();
+
+        for (String word : copyList.possibleAnswers()) {
+            boolean containsGray = false;
+
+            for (char c : word.toCharArray()) {
+                if (confirmedGray.containsKey(c)) {
+                    containsGray = true;
+                    break;
+                }
+            }
+
+            if (containsGray) {
+                wordsToRemove.add(word);
             }
         }
-        return false;
+
+        for (String wordToRemove : wordsToRemove) {
+            copyList.remove(wordToRemove);
+        }
     }
+
+    private void dontGuessYellowOnSameIndex() {
+        List<String> wordsToRemove = new ArrayList<>();
+
+        for (String word : copyList.possibleAnswers()) {
+            boolean containsYellow = false;
+
+            for (int i = 0; i < word.length(); i++) {
+                if (confirmedYellow.containsKey(word.charAt(i)) && confirmedYellow.get(word.charAt(i)) == i) {
+                    containsYellow = true;
+                    break;
+                }
+            }
+            if (containsYellow) {
+                wordsToRemove.add(word);
+            }
+        }
+
+        for (String wordToRemove : wordsToRemove) {
+            copyList.remove(wordToRemove);
+        }
+    }
+
+    // make a mathod that dont guess words with duplicate letters
+
+    private WordleWordList eliminateWordsWithDuplicateLetters() {
+        List<String> filteredWords = new ArrayList<>();
+
+        for (String word : copyList.possibleAnswers()) {
+            boolean hasDuplicate = false;
+            Set<Character> uniqueLetters = new HashSet<>();
+
+            for (char c : word.toCharArray()) {
+                if (uniqueLetters.contains(c)) {
+                    hasDuplicate = true;
+                    break;
+                }
+                uniqueLetters.add(c);
+            }
+
+            if (!hasDuplicate) {
+                filteredWords.add(word);
+            }
+        }
+
+        return new WordleWordList(filteredWords);
+    }
+
 }

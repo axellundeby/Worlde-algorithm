@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import no.uib.inf102.wordle.resources.GetWords;
 
@@ -158,7 +159,7 @@ public class WordleWordList {
 		List<HashMap<Character, Integer>> hashmapList = countCommonLetters(words);
 		int highscore = 0;
 		String bestword = "";
-		for (String word : words) {// O(n) siden word er bare 5 bokstaver
+		for (String word : words) {
 			int wordPoints = 0;
 			for (int i = 0; i < word.length(); i++) {
 				int charPoints = 0;
@@ -174,9 +175,4 @@ public class WordleWordList {
 		}
 		return bestword;
 	}
-
-	public String orate() {
-		return "orate";
-	}
-
 }
