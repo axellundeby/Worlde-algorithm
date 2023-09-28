@@ -27,6 +27,7 @@ public class AIPerformance {
         strategies.add(new EliminateStrategy());
         strategies.add(new FrequencyStrategy());
         strategies.add(new MyAiStrategy());
+        strategies.add(new MyAiStrategy1());
 
         Map<IStrategy, AIStatistics> stats = new HashMap<>();
         System.out.println("\nStrategies running...");

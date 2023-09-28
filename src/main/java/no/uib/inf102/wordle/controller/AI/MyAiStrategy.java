@@ -44,10 +44,14 @@ public class MyAiStrategy implements IStrategy {
         if (guessCount >= 1) {
             dontGuessYellowOnSameIndex();
             removeGreenFromCopyList();
-            // eliminateWordsWithDuplicateLetters();
             guessCount++;
             return guesses.bestword();
         }
+
+        if (guessCount == 1) {
+            eliminateWordsWithDuplicateLetters();
+        }
+
         if (guessCount >= 1 && (confirmedGreen.size() <= 1 && confirmedYellow.size() <= 1)// endre case
                 || (confirmedGray.size() <= 3) || confirmedGreen.size() <= 3) {
             if (copyList.size() != 0) {
@@ -84,9 +88,9 @@ public class MyAiStrategy implements IStrategy {
             }
             index++;
         }
-        System.out.println("Green: " + confirmedGreen);
-        System.out.println("Yellow: " + confirmedYellow);
-        System.out.println("Gray: " + confirmedGray);
+        // System.out.println("Green: " + confirmedGreen);
+        // System.out.println("Yellow: " + confirmedYellow);
+        // System.out.println("Gray: " + confirmedGray);
     }
 
     private WordleWordList eliminateGreenAsGrey(WordleWordList wordList, WordleWord feedback) {
