@@ -110,6 +110,14 @@ public class WordleWord implements Iterable<WordleCharacter> {
         return word.iterator();
     }
 
+    public AnswerType getFeedbackAtIndex(int i) {
+        if (i >= 0 && i < word.size()) {
+            return word.get(i).answerType;
+        } else {
+            throw new IndexOutOfBoundsException("Index " + i + " is out of bounds.");
+        }
+    }
+
     /**
      * Check if word is legal given the feedback. Cheks that all letters that we
      * know the position of is in the word, and that all correctly placed letters

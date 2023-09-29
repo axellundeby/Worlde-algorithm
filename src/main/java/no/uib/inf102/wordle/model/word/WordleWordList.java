@@ -89,14 +89,16 @@ public class WordleWordList {
 	 * 
 	 * @param feedback
 	 */
-	public void eliminateWords(WordleWord feedback) {
+	public void eliminateWords(WordleWord feedback) {// O(n)
 		List<String> posslist = new ArrayList<>();
-		for (String possWord : possibleAnswers) {
-			if (WordleWord.isPossibleWord(possWord, feedback)) {
-				posslist.add(possWord);
+		for (String possWord : possibleAnswers) { // O(n)
+			if (WordleWord.isPossibleWord(possWord, feedback)) { // O(k)
+				posslist.add(possWord); // O(1)
 			}
 		}
-		possibleAnswers = posslist;
+
+		// Assigning 'posslist' to 'possibleAnswers' takes O(m) time.
+		possibleAnswers = posslist; // O(m)
 	}
 
 	/**
@@ -127,19 +129,39 @@ public class WordleWordList {
 		return allWords.get(0).length();
 	}
 
-	private List<HashMap<Character, Integer>> countCommonLetters(List<String> poss) {
-		List<HashMap<Character, Integer>> hashMapList = new ArrayList<>();
+	/**
+	 * Counts the number of times each letter appears in each position of the
+	 * possible answers.
+	 *
+	 * This method returns a list of hashmaps, where each hashmap contains the
+	 * number of times each letter appears in a given position of the possible
+	 * answers. For example, if the possible answers are "horse", "stars", "house",
+	 * "hopes", and "hoses", then the returned list of hashmaps would be:
+	 *
+	 * <pre>
+	 * [{h=5, s=0}, {o=2, t=1, o=1, p=1, o=1}, {r=1, a=1, u=1, p=1, s=1}, {s=2, e=2, s=1, e=1, s=1}, {e=2, s=2, e=1, s=1, e=1}]
+	 * </pre>
+	 *
+	 * @param poss The list of possible answers.
+	 * @return A list of hashmaps, where each hashmap contains the number of times
+	 *         each letter appears in a given position of the possible answers.
+	 */
 
-		for (int i = 0; i < 5; i++) {
-			HashMap<Character, Integer> letterCount = new HashMap<>();
-			for (String word : poss) {
-				char letter = word.charAt(i);
-				letterCount.put(letter, letterCount.getOrDefault(letter, 0) + 1);
+	public List<HashMap<Character, Integer>> countCommonLetters(List<String> poss) {// O(n)
+		List<HashMap<Character, Integer>> hashMapList = new ArrayList<>(); // O(1)
+
+		// This loop iterates 5 times, which is a constant factor (O(5) = O(1)).
+		for (int i = 0; i < 5; i++) { // O(1)
+			HashMap<Character, Integer> letterCount = new HashMap<>(); // O(1)
+			for (String word : poss) { // O(n)
+				char letter = word.charAt(i); // O(1)
+				letterCount.put(letter, letterCount.getOrDefault(letter, 0) + 1); // O(1)
 			}
-			hashMapList.add(letterCount);
+
+			hashMapList.add(letterCount); // O(1)
 		}
 
-		return hashMapList;
+		return hashMapList; // O(1)
 	}
 
 	/**
@@ -155,24 +177,30 @@ public class WordleWordList {
 	 * @return The best word among the list of possible answers.
 	 */
 	public String bestword() {
-		List<String> words = possibleAnswers();
-		List<HashMap<Character, Integer>> hashmapList = countCommonLetters(words);
-		int highscore = 0;
-		String bestword = "";
-		for (String word : words) {
-			int wordPoints = 0;
-			for (int i = 0; i < word.length(); i++) {
-				int charPoints = 0;
-				HashMap<Character, Integer> currentMap = hashmapList.get(i);
-				charPoints += currentMap.getOrDefault(word.charAt(i), 0);
-				wordPoints += charPoints;
+		List<String> words = possibleAnswers(); // O(1)
+		List<HashMap<Character, Integer>> hashmapList = countCommonLetters(words); // O(n)
+		int highscore = 0; // O(1)
+		String bestword = ""; // O(1)
+
+		for (String word : words) { // O(N)
+			int wordPoints = 0; // O(1)
+
+			for (int i = 0; i < word.length(); i++) { // O(5) Word length is always 5
+				int charPoints = 0; // O(1)
+				HashMap<Character, Integer> currentMap = hashmapList.get(i); // O(1)
+				charPoints += currentMap.getOrDefault(word.charAt(i), 0); // O(1)
+				wordPoints += charPoints; // O(1)
 			}
-			if (wordPoints > highscore) {
-				highscore = wordPoints;
-				bestword = word;
+
+			if (wordPoints > highscore) { // O(1)
+				highscore = wordPoints; // O(1)
+				bestword = word; // O(1)
 			}
-			wordPoints = 0;
+
+			wordPoints = 0; // O(1)
 		}
-		return bestword;
+
+		return bestword; // O(1)
 	}
+
 }
